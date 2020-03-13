@@ -5,9 +5,9 @@ from datetime import datetime
 from .filters import get_filters
 from .utils import get_logger
 
-IOSTAT_DATE_FORMAT = '%m/%d/%Y %I:%M:%S %p'
+IOSTAT_DATE_FORMAT = '%m/%d/%y %H:%M:%S'
 IOSTAT_DATE = re.compile(r"""
-(?P<date>^\d{2}/\d{2}/\d{4}\s*\d{2}:\d{2}:\d{2}\s*(AM|PM))
+(?P<date>^\d{2}/\d{2}/\d{2}\s*\d{2}:\d{2}:\d{2})
 """, re.VERBOSE)
 
 log = get_logger()
