@@ -1,5 +1,6 @@
 import math
 from collections import defaultdict
+from datetime import datetime, timedelta
 
 from matplotlib import dates as mdates
 from matplotlib import gridspec
@@ -12,6 +13,11 @@ from .utils import get_logger
 
 log = get_logger()
 default_figsize = plt.rcParams.get('figure.figsize')
+
+
+class InvalidArgumentError(Exception):
+    ''' Raised when the given arguments are wrong. '''
+    pass
 
 
 class Plotter(Renderer):
@@ -176,6 +182,17 @@ class Plotter(Renderer):
 
     def plot(self):
         datetime_data = [i['date'] for i in self.stats]
+        if all(x is None for x in datetime_data):
+            #TODO need start time
+            if not self.args.since:
+                # If neither a start time nor the time information from iostat is given quit here.
+                raise InvalidArgumentError
+            assert isinstance(self.args.since, datetime)
+
+            #FIXME need frequency rate of iostat, here assume a frequency of 1 second
+            period = len(self.stats)
+            datetime_data = [self.args.since + timedelta(seconds=s) for s in range(period)]
+
         if not self.args.cpu_only:
             self.plot_device(datetime_data)
         if self.args.with_cpu:

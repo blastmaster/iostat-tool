@@ -2,6 +2,8 @@ from functools import partial
 
 
 def filter_since(since_date, stat):
+    if stat['date'] is None:
+        return True
     return since_date <= stat['date']
 
 
